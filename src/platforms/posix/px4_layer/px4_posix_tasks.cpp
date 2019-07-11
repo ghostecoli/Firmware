@@ -147,6 +147,7 @@ px4_task_t px4_task_spawn_cmd(const char *name, int scheduler, int priority, int
 
 	structsize = sizeof(pthdata_t) + (argc + 1) * sizeof(char *);
 
+	//UNNO,分配任务结构，结构后面多出一些字节存放程序启动参数
 	// not safe to pass stack data to the thread creation
 	pthdata_t *taskdata = (pthdata_t *)malloc(structsize + len);
 	memset(taskdata, 0, structsize + len);
@@ -159,6 +160,7 @@ px4_task_t px4_task_spawn_cmd(const char *name, int scheduler, int priority, int
 
 	for (i = 0; i < argc; i++) {
 		PX4_DEBUG("arg %d %s\n", i, argv[i]);
+		//UNNO, 在结构体后面的内存中，存放此程序的启动参数信息
 		taskdata->argv[i] = (char *)offset;
 		strcpy((char *)offset, argv[i]);
 		offset += strlen(argv[i]) + 1;
@@ -194,6 +196,7 @@ px4_task_t px4_task_spawn_cmd(const char *name, int scheduler, int priority, int
 
 #endif
 
+	//UNNO, 设置继承调度属性，如果不设置这个，则线程的优先级、调度策略等皆继承为父线程的
 	rv = pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED);
 
 	if (rv != 0) {
@@ -203,6 +206,7 @@ px4_task_t px4_task_spawn_cmd(const char *name, int scheduler, int priority, int
 		return (rv < 0) ? rv : -rv;
 	}
 
+	//UNNO, 设置线程调度策略
 	rv = pthread_attr_setschedpolicy(&attr, scheduler);
 
 	if (rv != 0) {

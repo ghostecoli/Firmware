@@ -84,6 +84,7 @@ void init_once()
 #endif
 }
 
+//UNNO PX4 初始化
 void init(int argc, char *argv[], const char *app_name)
 {
 	printf("\n");

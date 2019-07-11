@@ -209,6 +209,7 @@ static void run_cmd(const vector<string> &appargs, bool exit_on_fail, bool silen
 
 		unsigned int i = 0;
 
+		//UNNO 组装APP启动参数
 		while (i < appargs.size() && appargs[i] != "") {
 			arg[i] = (char *)appargs[i].c_str();
 			++i;
@@ -216,6 +217,7 @@ static void run_cmd(const vector<string> &appargs, bool exit_on_fail, bool silen
 
 		arg[i] = (char *)nullptr;
 
+		//UNNO 运行指定的APP
 		int retval = apps[command](i, (char **)arg);
 
 		if (retval) {
@@ -291,6 +293,7 @@ int SITL_MAIN(int argc, char **argv);
 
 int SITL_MAIN(int argc, char **argv)
 #else
+//UNNO PX4 主函数入口点
 int main(int argc, char **argv)
 #endif
 {
@@ -367,7 +370,7 @@ int main(int argc, char **argv)
 		}
 
 		++index;
-	}
+	} // end of (index < argc)
 
 	if (positional_arg_count != 2 && positional_arg_count != 1) {
 		PX4_ERR("Error expected 1 or 2 position arguments, got %d", positional_arg_count);
@@ -449,6 +452,7 @@ int main(int argc, char **argv)
 	DriverFramework::Framework::initialize();
 	px4::init_once();
 
+	//UNNO 初始化串口打印"PX4"字样
 	px4::init(argc, argv, "px4");
 
 	// if commandfile is present, process the commands from the file
@@ -524,6 +528,7 @@ int main(int argc, char **argv)
 			case 127:	// backslash
 				if (mystr.length() > 0) {
 					mystr.pop_back();
+					//UNNO 清除一行?
 					printf("%c[2K", 27);	// clear line
 					cout << (char)13;
 					print_prompt();
